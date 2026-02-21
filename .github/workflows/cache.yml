@@ -1,0 +1,23 @@
+name: Dependency Caching Action
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Create a dummy folder so the cache has something to save
+      - name: Make fake dependencies
+        run: mkdir -p fake_modules && echo "dummy data" > fake_modules/data.txt
+
+      # 2. The caching step using the exact key required
+      - name: Setup Cache
+        id: my-cache
+        uses: actions/cache@v4
+        with:
+          path: fake_modules
+          key: cache-54259a1
+
+      # 3. The exact step name and echo command required by the assignment
+      - name: prime-cache-54259a1
+        run: echo "Cache hit result: ${{ steps.my-cache.outputs.cache-hit }}"
